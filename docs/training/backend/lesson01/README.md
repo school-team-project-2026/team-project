@@ -335,8 +335,7 @@ def filter_high_scores(scores: list[int], threshold: int) -> list[int]:
 - 80点以上の件数
 
 ```python
-def summarize_scores(scores: list[int]) -> dict[str, int | float]:
-    ...
+def summarize_scores(scores: list[int]) -> dict[str, int | float]: ...
 ```
 
 コードを書く前に、入力・処理・出力・境界値を整理します。
