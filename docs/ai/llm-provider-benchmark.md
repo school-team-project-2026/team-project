@@ -311,3 +311,77 @@ Provider Dependency
 
 「最も高性能なModel」ではなく、
 「PRISM Stage 0に最も適したModel」を優勝とする。
+
+## Preliminary Result - 2026-09-11
+
+### Stage 0 Primary Candidate
+
+Groq / `openai/gpt-oss-120b`
+
+Stage 0の暫定Primary Provider / Modelとして採用する。
+
+### Groq Preliminary Result
+
+8 Cases × 1 Run:
+
+- Success: 7
+- API Failure: 1
+- Schema Failure: 0
+
+CASE-04では以下のエラーが発生した。
+
+- BadRequestError
+- HTTP 400
+- `json_validate_failed`
+
+CASE-04のみ再実行したが、同じエラーが再現した。
+
+現在のGroq Providerでは Structured Outputs の
+Best-effort Mode (`strict: false`) を使用している。
+
+そのため、この結果は一時的な通信障害ではなく、
+現在のStructured Output設定における再現性のある
+Validation Failureとして記録する。
+
+GPT-OSS 120BはStrict Mode (`strict: true`) に対応しているため、
+正式なPreferenceExtractorへ統合する際にStrict Modeへの移行を行い、
+再度Smoke Testする。
+
+### Quality Tendency
+
+良好だった点:
+
+- Evidenceが少ない場合に空配列を利用できる
+- 入力にない嗜好の過剰補完が比較的少ない
+- Negative Preferenceを適切に扱えた
+- ゲーム、スポーツ、音楽、園芸等でCross-domain abstractionが機能した
+- 成功RequestはPreferenceFeaturesへ正常変換できた
+
+注意点:
+
+- `values`では一部、入力より強い推論が見られた
+- Best-effort Structured OutputでCASE-04が再現性を持って失敗した
+
+### Gemini Result
+
+Gemini 3.8 FlashはQuality Reference / Fallbackとして保持する。
+
+Quality面では高い抽象化能力を確認したが、
+Free TierのRequest QuotaがPRISMの反復開発には厳しく、
+Stage 0の日常開発Providerとしては採用しない。
+
+### Decision
+
+Primary:
+Groq / `openai/gpt-oss-120b`
+
+Fallback / Quality Reference:
+Gemini 3.8 Flash
+
+第3Providerの追加Benchmarkは現時点では行わない。
+
+次の作業ではProvider Benchmarkを終了し、
+PreferenceExtractorの正式実装へ戻る。
+
+GroqについてはStrict Structured Output対応を
+PreferenceExtractor統合時の必須確認事項とする。
