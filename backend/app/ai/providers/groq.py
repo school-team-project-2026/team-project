@@ -41,7 +41,7 @@ class GroqProvider:
                 "type": "json_schema",
                 "json_schema": {
                     "name": "preference_features",
-                    "strict": False,
+                    "strict": True,
                     "schema": PreferenceFeatures.model_json_schema(),
                 },
             },
