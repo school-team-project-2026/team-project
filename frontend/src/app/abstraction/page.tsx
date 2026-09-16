@@ -8,18 +8,24 @@ export default function Abstraction_Home() {
             抽象化ホーム
         </h1>
         <LinkButton href="/" className="mt-6">
-          homeへ
+          ホームへ
         </LinkButton>
 
         <p>
           <LinkButton href="/search" className="mt-6">
-            searchへ
+            探すへ
           </LinkButton>
         </p>
 
         <p>
           <LinkButton href="/sns" className="mt-6">
             snsへ
+          </LinkButton>
+        </p>
+
+        <p>
+          <LinkButton href="/setting" className="mt-6">
+            設定へ
           </LinkButton>
         </p>
       </div>

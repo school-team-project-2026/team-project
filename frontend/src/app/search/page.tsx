@@ -9,7 +9,7 @@ export default function Search_Home() {
         </h1>
 
         <LinkButton href="/" className="mt-6">
-          homeへ
+          ホームへ
         </LinkButton>
 
         <p>
@@ -20,7 +20,13 @@ export default function Search_Home() {
 
         <p>
           <LinkButton href="/abstraction" className="mt-6">
-            abstractionへ
+            抽象化へ
+          </LinkButton>
+        </p>
+
+        <p>
+          <LinkButton href="/setting" className="mt-6">
+            設定へ
           </LinkButton>
         </p>
       </div>

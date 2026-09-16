@@ -23,10 +23,16 @@ export default function Home() {
         
         <p>
           <LinkButton href="/abstraction" className="mt-6">
-            設定へ
+            抽象化へ
           </LinkButton>
         </p>
 
+        <p>
+          <LinkButton href="/setting" className="mt-6">
+            設定へ
+          </LinkButton>
+        </p>
+        
       </div>
     </main>
   );

@@ -1,17 +1,16 @@
 import {LinkButton} from '@/components/Button/ButtonLink';
 
-export default function Sns_Home() {
+export default function Setting_Home() {
   return (
     <main className="flex min-h-screen items-center justify-center px-6">
       <div className="text-center">
         <h1 className="text-3xl font-semibold tracking-tight">
-            SNSホーム
+            設定ホーム
         </h1>
-
         <LinkButton href="/" className="mt-6">
           ホームへ
         </LinkButton>
-        
+
         <p>
           <LinkButton href="/search" className="mt-6">
             探すへ
@@ -19,14 +18,14 @@ export default function Sns_Home() {
         </p>
 
         <p>
-          <LinkButton href="/abstraction" className="mt-6">
-            抽象化へ
+          <LinkButton href="/sns" className="mt-6">
+            snsへ
           </LinkButton>
         </p>
 
         <p>
-          <LinkButton href="/setting" className="mt-6">
-            設定へ
+          <LinkButton href="/abstraction" className="mt-6">
+            抽象化へ
           </LinkButton>
         </p>
       </div>
