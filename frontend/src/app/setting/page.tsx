@@ -1,4 +1,4 @@
-import {LinkButton} from '@/components/Button/ButtonLink';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 export default function Setting_Home() {
   return (
@@ -7,27 +7,9 @@ export default function Setting_Home() {
         <h1 className="text-3xl font-semibold tracking-tight">
             設定ホーム
         </h1>
-        <LinkButton href="/" className="mt-6">
-          ホームへ
-        </LinkButton>
 
-        <p>
-          <LinkButton href="/search" className="mt-6">
-            探すへ
-          </LinkButton>
-        </p>
+        <Sidebar />
 
-        <p>
-          <LinkButton href="/sns" className="mt-6">
-            snsへ
-          </LinkButton>
-        </p>
-
-        <p>
-          <LinkButton href="/abstraction" className="mt-6">
-            抽象化へ
-          </LinkButton>
-        </p>
       </div>
     </main>
   );
