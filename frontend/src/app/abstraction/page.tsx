@@ -1,4 +1,4 @@
-import {LinkButton} from '@/components/Button/ButtonLink';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 export default function Abstraction_Home() {
   return (
@@ -7,27 +7,9 @@ export default function Abstraction_Home() {
         <h1 className="text-3xl font-semibold tracking-tight">
             抽象化ホーム
         </h1>
-        <LinkButton href="/" className="mt-6">
-          ホームへ
-        </LinkButton>
 
-        <p>
-          <LinkButton href="/search" className="mt-6">
-            探すへ
-          </LinkButton>
-        </p>
+        <Sidebar />
 
-        <p>
-          <LinkButton href="/sns" className="mt-6">
-            snsへ
-          </LinkButton>
-        </p>
-
-        <p>
-          <LinkButton href="/setting" className="mt-6">
-            設定へ
-          </LinkButton>
-        </p>
       </div>
     </main>
   );
