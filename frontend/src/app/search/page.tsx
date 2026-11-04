@@ -1,4 +1,4 @@
-import {LinkButton} from '@/components/Button/ButtonLink';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 export default function Search_Home() {
   return (
@@ -8,21 +8,8 @@ export default function Search_Home() {
             探すホーム
         </h1>
 
-        <LinkButton href="/" className="mt-6">
-          homeへ
-        </LinkButton>
+        <Sidebar />
 
-        <p>
-          <LinkButton href="/sns" className="mt-6">
-            snsへ
-          </LinkButton>
-        </p>
-
-        <p>
-          <LinkButton href="/abstraction" className="mt-6">
-            abstractionへ
-          </LinkButton>
-        </p>
       </div>
     </main>
   );

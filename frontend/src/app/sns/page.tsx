@@ -1,4 +1,4 @@
-import {LinkButton} from '@/components/Button/ButtonLink';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 export default function Sns_Home() {
   return (
@@ -8,21 +8,8 @@ export default function Sns_Home() {
             SNSホーム
         </h1>
 
-        <LinkButton href="/" className="mt-6">
-          homeへ
-        </LinkButton>
-        
-        <p>
-          <LinkButton href="/search" className="mt-6">
-            searchへ
-          </LinkButton>
-        </p>
+        <Sidebar />
 
-        <p>
-          <LinkButton href="/abstraction" className="mt-6">
-            abstractionへ
-          </LinkButton>
-        </p>
       </div>
     </main>
   );

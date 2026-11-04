@@ -1,4 +1,4 @@
-import {LinkButton} from '@/components/Button/ButtonLink';
+import { Sidebar } from '@/components/sidebar/sidebar';
 
 export default function Home() {
   return (
@@ -11,22 +11,8 @@ export default function Home() {
           Team Project frontend
         </p>
 
-        <LinkButton href="/search" className="mt-6">
-          探すへ
-        </LinkButton>
-
-        <p>
-          <LinkButton href="/sns" className="mt-6">
-            SNSへ
-          </LinkButton> 
-        </p>
+        <Sidebar />
         
-        <p>
-          <LinkButton href="/abstraction" className="mt-6">
-            設定へ
-          </LinkButton>
-        </p>
-
       </div>
     </main>
   );
