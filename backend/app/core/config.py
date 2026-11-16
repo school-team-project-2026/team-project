@@ -24,5 +24,7 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
+    embedding_model: str = "intfloat/multilingual-e5-small"
+
 
 settings = Settings()
