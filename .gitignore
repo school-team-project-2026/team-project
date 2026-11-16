@@ -32,3 +32,6 @@ frontend/out/
 
 # Docker local data
 docker-data/
+
+# Benchmarks
+backend/benchmarks/llm_provider/results/fake-model.jsonl
