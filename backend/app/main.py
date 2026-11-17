@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.routers.interest_items import router as interest_items_router
+from app.routers.recommendations import (
+    router as recommendations_router,
+)
 
 app = FastAPI(title="Team Project API")
 
@@ -14,6 +17,7 @@ app.add_middleware(
 )
 
 app.include_router(interest_items_router)
+app.include_router(recommendations_router)
 
 
 @app.get("/health")
