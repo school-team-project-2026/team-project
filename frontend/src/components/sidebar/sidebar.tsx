@@ -57,18 +57,8 @@ export const Sidebar: React.FC = () => {
     const currentPath = usePathname() || '/';
 
     return (
-        <aside className="fixed top-0 left-0 bottom-0 z-30 w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800 transition-all duration-300"
+        <aside className="sticky top-0 h-[calc(100dvh-4rem)] w-64 shrink-0 flex flex-col overflow-hidden border-r border-slate-800 bg-slate-900 text-slate-300"
          aria-label="メインナビゲーション">
-            {/*ロゴ・ヘッダー領域*/}
-            <div className="flex items-center justify-center sm:justify-start gap-3 h-16 px-4 border-b border-slate-800">
-                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center tect-white font-bold shrink-0">
-                    A
-                </div>
-                <span className="hidden sm::inline text-lg font-bold text-ehite tracking-eide truncate">
-                    Admin Console
-                </span>
-            </div>
-
             {/*ナビゲーションリンク*/}
             <nav className="flex-1 py-4 overflow-y-auto">
                 <ul className="space-y-1 px-2">

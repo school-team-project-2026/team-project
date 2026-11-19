@@ -1,24 +1,65 @@
 import { Sidebar } from '@/components/sidebar/sidebar';
 import { Header } from '@/components/header/header';
+import PostCard from "@/components/post/PostCard";
+
+//仮データ
+const posts = [
+  {
+    id: 1,
+    content: 'これはサンプルの投稿です。',
+    hobby: 'プログラミング',
+    likes: 10,
+    imageUrl: '/images/posts/sample.jpg',
+  },
+  {
+    id: 2,
+    content: 'これは別のサンプルの投稿です。',
+    hobby: '読書',
+    likes: 5,
+  },
+  {
+    id: 3,
+    content: 'これはさらに別のサンプルの投稿です。',
+    hobby: '旅行',
+    likes: 8,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex h-dvh flex-col overflow-hidden">
-      <Header />
-      <main className="flex min-h-screen items-center justify-center px-6">
-        <div className="text-center">
-          
-          <h1 className="text-3xl font-semibold tracking-tight">
-            開発環境は正常に動作しています
-        </h1>
-        <p className="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-          Team Project frontend
-        </p>
+    <div className="flex h-dvh flex-col">
 
-          <Sidebar />
+      <Header />
+
+      <div className="flex flex-1 min-h-0">
+
+        <Sidebar />
+
+        <main className="min-w-0 flex-1 overflow-y-auto bg-zinc-50 px-6 py-8 dark:bg-zinc-900">
           
-        </div>
-      </main>
+          <div className="mx-auto max-w-3xl">
+
+            <h1 className="mb-6 text-2xl font-bold">
+              ホーム
+            </h1>
+
+            <section>
+              <h2 className="mb-4 text-xl font-semibold">
+              新着投稿
+              </h2>
+
+              <div className="mx-auto w-full max-w-3xl">
+                <div className="space-y-4">
+                   {posts.map((post) => (
+                     <PostCard key={post.id} post={post} />
+                    ))}
+                </div>
+              </div>
+
+            </section>
+          </div>
+        </main>
+      </div>
     </div>
   );
 }
