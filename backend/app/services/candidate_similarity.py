@@ -19,12 +19,12 @@ def find_similar_candidates(
     session: Session,
     embedding_provider: EmbeddingProvider,
     query_text: str,
-    limit: int = 5,
+    limit: int | None = 5,
 ) -> list[ScoredCandidate]:
     if not query_text.strip():
         raise ValueError("Query text must not be empty")
 
-    if limit <= 0:
+    if limit is not None and limit <= 0:
         raise ValueError("Limit must be positive")
 
     candidates = session.scalars(
@@ -61,4 +61,4 @@ def find_similar_candidates(
         )
     )
 
-    return scored_candidates[:limit]
+    return scored_candidates if limit is None else scored_candidates[:limit]

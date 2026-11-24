@@ -18,4 +18,5 @@ class FakeProvider:
             desired_experiences=[],
             values=[],
             keywords=[name],
+            negative_preferences=[],
         )

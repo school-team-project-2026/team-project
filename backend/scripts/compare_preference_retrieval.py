@@ -11,13 +11,13 @@ from app.services.preference_aware_retrieval import (
 
 def main() -> None:
     request = RecommendationRequest(
-    interest_text="ジャズ",
-    liked_aspects=(
-        "テンポの速い演奏や楽器同士の掛け合いを"
-        "聴くのが好きです。自分で演奏することには"
-        "特に興味はありません。"
-    ),
-)
+        interest_text="ジャズ",
+        liked_aspects=(
+            "テンポの速い演奏や楽器同士の掛け合いを"
+            "聴くのが好きです。自分で演奏することには"
+            "特に興味はありません。"
+        ),
+    )
 
     embedding = E5EmbeddingProvider()
     extractor = PreferenceExtractor(GroqProvider())
@@ -37,7 +37,7 @@ def main() -> None:
             session=session,
             request=request,
             extractor=extractor,
-            embedding_provider=embedding,
+            embedding_provider_factory=lambda: embedding,
             limit=5,
         )
 

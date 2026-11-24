@@ -1,14 +1,16 @@
 from collections.abc import Iterator
+from unittest.mock import patch
 
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 from app.ai.preference_extractor import PreferenceExtractor
-from app.ai.schemas import PreferenceFeatures
+from app.ai.schemas import NegativePreference, PreferenceFeatures
 from app.models.candidate import Candidate
 from app.schemas.recommendation import RecommendationRequest
 from app.services.preference_aware_retrieval import (
+    PreferenceExtractionError,
     retrieve_preference_aware_candidates,
 )
 
@@ -110,6 +112,7 @@ def make_features(
         desired_experiences=[],
         values=[],
         keywords=[],
+        negative_preferences=[],
     )
 
 
@@ -126,7 +129,7 @@ def test_uses_extracted_features_when_reason_exists(
             liked_aspects="強敵の攻略法を考えるのが好き",
         ),
         extractor=PreferenceExtractor(provider),
-        embedding_provider=embedding,
+        embedding_provider_factory=lambda: embedding,
     )
 
     assert result.search_method == "extracted"
@@ -157,7 +160,7 @@ def test_uses_raw_query_without_reason(
             interest_text="ターン制RPG",
         ),
         extractor=PreferenceExtractor(provider),
-        embedding_provider=embedding,
+        embedding_provider_factory=lambda: embedding,
     )
 
     assert result.search_method == "raw"
@@ -180,44 +183,80 @@ def test_falls_back_when_extracted_features_are_empty(
             liked_aspects="楽しいから",
         ),
         extractor=PreferenceExtractor(provider),
-        embedding_provider=embedding,
+        embedding_provider_factory=lambda: embedding,
     )
 
-    expected_query = "興味: ターン制RPG\n好きな理由: 楽しいから"
+    expected_query = "ターン制RPG"
 
     assert result.query_text == expected_query
     assert embedding.query_texts == [expected_query]
     assert result.search_method == "raw"
-    assert result.features is None
+    assert result.features == make_features([])
     assert len(provider.calls) == 1
 
 
-def test_falls_back_when_extraction_fails(
+def test_stops_before_search_when_extraction_fails(
     db_session: Session,
-    caplog: pytest.LogCaptureFixture,
 ) -> None:
     provider = FakePreferenceProvider(RuntimeError("Simulated AI failure"))
+    embedding = FakeEmbeddingProvider()
+
+    request = RecommendationRequest(
+        interest_text="ターン制RPG",
+        liked_aspects="攻略を考えるのが好き",
+    )
+
+    with patch(
+        "app.services.preference_aware_retrieval.find_similar_candidates"
+    ) as mock_search:
+        with pytest.raises(PreferenceExtractionError):
+            retrieve_preference_aware_candidates(
+                session=db_session,
+                request=request,
+                extractor=PreferenceExtractor(provider),
+                embedding_provider_factory=lambda: embedding,
+            )
+
+        mock_search.assert_not_called()
+
+
+def test_uses_interest_only_when_only_negative_preferences_exist(
+    db_session: Session,
+) -> None:
+    extracted = PreferenceFeatures(
+        attributes=[],
+        appeal_points=[],
+        desired_experiences=[],
+        values=[],
+        keywords=[],
+        negative_preferences=[
+            NegativePreference(
+                target="高い場所",
+                strength="avoid",
+                evidence="高い場所は絶対に避けたい",
+            )
+        ],
+    )
+
+    provider = FakePreferenceProvider(extracted)
     embedding = FakeEmbeddingProvider()
 
     result = retrieve_preference_aware_candidates(
         session=db_session,
         request=RecommendationRequest(
             interest_text="ターン制RPG",
-            liked_aspects="攻略を考えるのが好き",
+            liked_aspects="高い場所は絶対に避けたい",
         ),
         extractor=PreferenceExtractor(provider),
-        embedding_provider=embedding,
+        embedding_provider_factory=lambda: embedding,
     )
 
-    expected_query = (
-    "興味: ターン制RPG\n"
-    "好きな理由: 攻略を考えるのが好き"
-    )
-
+    # 非希望の文章をEmbeddingに混入させない。
+    assert result.query_text == "ターン制RPG"
+    assert embedding.query_texts == ["ターン制RPG"]
     assert result.search_method == "raw"
-    assert result.query_text == expected_query
-    assert result.features is None
-    assert len(result.candidates) == 2
-    assert embedding.query_texts == [expected_query]
 
-    assert "Preference extraction failed" in caplog.text
+    # 抽出に成功したNegative Preferenceは保持する。
+    assert result.features is not None
+    assert result.features == extracted
+    assert result.features.negative_preferences == (extracted.negative_preferences)

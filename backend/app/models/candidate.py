@@ -54,3 +54,8 @@ class Candidate(Base):
         server_default=func.now(),
         nullable=False,
     )
+
+    interaction_modes: Mapped[list[str] | None] = mapped_column(
+        JSON,
+        nullable=True,
+    )
