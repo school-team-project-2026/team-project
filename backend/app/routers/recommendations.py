@@ -119,7 +119,10 @@ def build_reason(candidate: Candidate) -> str:
     responses={
         503: {
             "model": RecommendationUnavailableResponse,
-            "description": ("特徴抽出サービスまたはEmbeddingモデルを利用できません。"),
+            "description": (
+                "特徴抽出サービスの初期化・解析失敗、"
+                "またはEmbeddingモデルの初期化失敗。"
+                ),
         },
     },
 )
