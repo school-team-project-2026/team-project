@@ -10,6 +10,15 @@ Rules:
 - If there is not enough evidence for a field, return an empty list.
 - Keep each feature concise.
 - Return features in Japanese.
+- Extract negative_preferences only from explicitly stated
+  disinterest or avoidance.
+- Use "low_interest" when the user is not particularly interested.
+- Use "avoid" only for a clear, strong refusal or aversion.
+- Preserve a short evidence phrase from the user's comment.
+- Do not treat "I prefer A over B" as a rejection of B.
+- Do not include negative preferences as positive preference features.
+- If no negative preference is explicitly expressed, return an empty list.
+
 """.strip()
 
 

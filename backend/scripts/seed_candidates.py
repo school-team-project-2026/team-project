@@ -3,6 +3,42 @@ from sqlalchemy import select
 from app.db.session import SessionLocal
 from app.models import Candidate
 
+CANDIDATE_INTERACTION_MODES = {
+    # Game
+    ("オクトパストラベラーII", "game"): ["play"],
+    ("Portal 2", "game"): ["play", "solve"],
+    ("Stardew Valley", "game"): ["play"],
+    # Board Game
+    ("パンデミック", "board_game"): ["play"],
+    ("カタン", "board_game"): ["play"],
+    ("コードネーム", "board_game"): ["play", "solve"],
+    # Sports
+    ("ボルダリング", "sports"): ["participate"],
+    ("バドミントン", "sports"): ["participate"],
+    ("オリエンテーリング", "sports"): ["participate"],
+    # Puzzle
+    ("リアル脱出ゲーム", "puzzle"): ["solve", "participate"],
+    ("数独", "puzzle"): ["solve"],
+    ("ジグソーパズル", "puzzle"): ["solve"],
+    # Cooking
+    ("スパイスカレー作り", "cooking"): ["create"],
+    ("パン作り", "cooking"): ["create"],
+    ("お菓子作り", "cooking"): ["create"],
+    # Music
+    ("ジャズ鑑賞", "music"): ["listen"],
+    ("バンドでの合奏", "music"): ["perform"],
+    ("DTMでの作曲", "music"): ["create"],
+    # Book
+    ("シャーロック・ホームズの冒険", "book"): ["read"],
+    ("三体", "book"): ["read"],
+    ("星の王子さま", "book"): ["read"],
+    # Movie
+    ("インターステラー", "movie"): ["watch"],
+    ("ナイブズ・アウト", "movie"): ["watch"],
+    ("ソウルフル・ワールド", "movie"): ["watch"],
+}
+
+
 SEED_CANDIDATES = [
     {
         "name": "オクトパストラベラーII",
@@ -410,28 +446,49 @@ SEED_CANDIDATES.extend(
 
 
 def seed_candidates() -> None:
+    keys = [(data["name"], data["domain"]) for data in SEED_CANDIDATES]
+
+    if len(keys) != len(set(keys)):
+        raise ValueError("Duplicate Candidate keys in seed data")
+
+    if set(keys) != set(CANDIDATE_INTERACTION_MODES):
+        raise ValueError("Candidate interaction mode mapping mismatch")
+
     added = 0
+    updated = 0
     skipped = 0
 
     with SessionLocal() as session:
         for data in SEED_CANDIDATES:
-            existing_id = session.scalar(
-                select(Candidate.id).where(
+            key = (data["name"], data["domain"])
+            modes = CANDIDATE_INTERACTION_MODES[key]
+
+            existing = session.scalar(
+                select(Candidate).where(
                     Candidate.name == data["name"],
                     Candidate.domain == data["domain"],
                 )
             )
 
-            if existing_id is not None:
-                skipped += 1
-                continue
+            if existing is None:
+                session.add(
+                    Candidate(
+                        **data,
+                        interaction_modes=list(modes),
+                    )
+                )
+                added += 1
 
-            session.add(Candidate(**data))
-            added += 1
+            elif existing.interaction_modes != modes:
+                existing.interaction_modes = list(modes)
+                updated += 1
+
+            else:
+                skipped += 1
 
         session.commit()
 
-    print(f"追加: {added}件 / 登録済み: {skipped}件")
+    print(f"追加: {added}件 / 更新: {updated}件 / 変更なし: {skipped}件")
 
 
 if __name__ == "__main__":

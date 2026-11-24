@@ -49,4 +49,13 @@ class RecommendationItem(BaseModel):
 
 class RecommendationResponse(BaseModel):
     analysis: RecommendationAnalysis
-    recommendations: list[RecommendationItem]
+    recommendations: list[RecommendationItem] = Field(
+        max_length=5,
+        description="推薦候補の一覧。制約条件に応じて0〜5件を返します。",
+    )
+
+
+class RecommendationUnavailableResponse(BaseModel):
+    detail: str = Field(
+        description="推薦サービスを利用できない理由。",
+    )
