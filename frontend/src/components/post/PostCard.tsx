@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BiHeart, BiComment, BiShare } from "react-icons/bi";
 
 type Post = {
     id: number;
@@ -29,7 +30,7 @@ function PostCard({ post }: PostCardProps) {
             </div>
 
             {/* 投稿文章 */}
-            <p className="mb-4 text-gray-700">
+            <p className="mb-4 whitespace-pre-wrap break-words text-gray-700">
                 {post.content}
             </p>
 
@@ -47,10 +48,31 @@ function PostCard({ post }: PostCardProps) {
             )}
 
             {/* いいね */}
-            <div className="border-t border-gray-100 pt-3">
-                <span className="text-sm text-gray-500">
-                    ♡ {post.likes}
-                </span>
+            <div className="flex items-center gap-5 border-t border-gray-100 pt-3">
+                <button
+                    type="button"
+                    className="flex items-center gap-2 text-gray-500 hover:text-red-500"
+                    aria-label="いいね"
+                >
+                    <BiHeart size={20} />
+                    <span className="text-sm">{post.likes}</span>
+                </button>
+
+                <button
+                    type="button"
+                    className="text-gray-500 hover:text-indigo-500"
+                    aria-label="コメント"
+                >
+                    <BiComment size={20} />
+                </button>
+
+                <button
+                    type="button"
+                    className="ml-auto text-gray-500 hover:text-indigo-500"
+                    aria-label="シェア"
+                >
+                    <BiShare size={20} />
+                </button>
             </div>
 
         </article>
